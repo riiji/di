@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using FractalPainting.Infrastructure.UiActions;
+using System.Linq;
 
 namespace FractalPainting.App
 {
@@ -13,7 +14,7 @@ namespace FractalPainting.App
             ClientSize = new Size(imageSettings.Width, imageSettings.Height);
 
             var mainMenu = new MenuStrip();
-            mainMenu.Items.AddRange(actions.ToMenuItems());
+            mainMenu.Items.AddRange(actions.OrderBy(item => item.Category.Priority).ToArray().ToMenuItems());
             Controls.Add(mainMenu);
 
             pictureBox.RecreateImage(imageSettings);

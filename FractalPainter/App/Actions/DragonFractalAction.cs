@@ -17,7 +17,8 @@ namespace FractalPainting.App.Actions
             this.dragonSettingsGeneratorFactory = dragonSettingsGeneratorFactory;
         }
 
-        public string Category => "Фракталы";
+        public Category Category { get; } = Category.AllCategories["Фракталы"];
+
         public string Name => "Дракон";
         public string Description => "Дракон Хартера-Хейтуэя";
 

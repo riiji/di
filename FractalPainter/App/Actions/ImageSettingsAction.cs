@@ -14,7 +14,8 @@ namespace FractalPainting.App.Actions
             this.appSettings = appSettings;
         }
 
-        public string Category => "Настройки";
+        public Category Category { get; } = Category.AllCategories["Настройки"];
+
         public string Name => "Изображение...";
         public string Description => "Размеры изображения";
 

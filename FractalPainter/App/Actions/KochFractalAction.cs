@@ -12,7 +12,7 @@ namespace FractalPainting.App.Actions
             this.painter = painter;
         }
 
-        public string Category => "Фракталы";
+        public Category Category { get; } = Category.AllCategories["Фракталы"];
         public string Name => "Кривая Коха";
         public string Description => "Кривая Коха";
 

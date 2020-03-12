@@ -15,8 +15,8 @@ namespace FractalPainting.App.Actions
             this.imageHolder = imageHolder;
             this.appSettings = appSettings;
         }
-        
-        public string Category => "Файл";
+
+        public Category Category { get; } = Category.AllCategories["Файл"];
         public string Name => "Сохранить...";
         public string Description => "Сохранить изображение в файл";
 
@@ -28,7 +28,7 @@ namespace FractalPainting.App.Actions
                 InitialDirectory = Path.GetFullPath(appSettings.ImagesDirectory),
                 DefaultExt = "bmp",
                 FileName = "image.bmp",
-                Filter = "Изображения (*.bmp)|*.bmp" 
+                Filter = "Изображения (*.bmp)|*.bmp"
             };
             var res = dialog.ShowDialog();
             if (res == DialogResult.OK)
