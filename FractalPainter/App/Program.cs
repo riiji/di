@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
 using FractalPainting.App.Actions;
+using FractalPainting.Factories;
 using FractalPainting.Infrastructure.Common;
 using FractalPainting.Infrastructure.UiActions;
 using Ninject;
+using Ninject.Extensions.Factory;
+using Ninject.Extensions.Conventions;
+using Ninject.Extensions.Conventions.Syntax;
 
 namespace FractalPainting.App
 {
@@ -25,13 +29,16 @@ namespace FractalPainting.App
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                container.Bind<IImageHolder, PictureBoxImageHolder>().To<PictureBoxImageHolder>().InSingletonScope();
+                container.Bind<AppSettings>().ToMethod((context) => context.Kernel.Get<SettingsManager>().Load());
+                container.Bind<IObjectSerializer>().To<XmlObjectSerializer>();
+                container.Bind<IBlobStorage>().To<FileBlobStorage>();
 
-                container.Bind<IUiAction>().To<DragonFractalAction>();
-                container.Bind<IUiAction>().To<ImageSettingsAction>();
-                container.Bind<IUiAction>().To<KochFractalAction>();
-                container.Bind<IUiAction>().To<PaletteSettingsAction>();
-                container.Bind<IUiAction>().To<SaveImageAction>();
+                container.Bind<Palette>().ToSelf().InSingletonScope();
+                container.Bind<IImageHolder, PictureBoxImageHolder>().To<PictureBoxImageHolder>().InSingletonScope();
+                container.Bind<IDragonPainterFactory>().ToFactory();
+
+                container.Bind(x =>
+                    x.FromThisAssembly().SelectAllClasses().InheritedFrom<IUiAction>().BindAllInterfaces());
 
                 Application.Run(container.Get<MainForm>());
             }
