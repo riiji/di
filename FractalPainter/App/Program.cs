@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
+using FractalPainting.App.Actions;
+using FractalPainting.Infrastructure.Common;
+using FractalPainting.Infrastructure.UiActions;
 using Ninject;
 
 namespace FractalPainting.App
@@ -21,11 +24,21 @@ namespace FractalPainting.App
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new MainForm());
+
+                container.Bind<IImageHolder, PictureBoxImageHolder>().To<PictureBoxImageHolder>().InSingletonScope();
+
+                container.Bind<IUiAction>().To<DragonFractalAction>();
+                container.Bind<IUiAction>().To<ImageSettingsAction>();
+                container.Bind<IUiAction>().To<KochFractalAction>();
+                container.Bind<IUiAction>().To<PaletteSettingsAction>();
+                container.Bind<IUiAction>().To<SaveImageAction>();
+
+                Application.Run(container.Get<MainForm>());
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
+                throw;
             }
         }
     }
